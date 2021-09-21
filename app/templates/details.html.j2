@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %} Product Details {% endblock %}
+
+{% block content %}
+
+    <div class="details mt-5">
+        <div class="row">
+            <div class="col-4">
+                <div class="text-center">
+                    <img style="object-fit: contain" src="{{product.img}}" class="card-img-top " alt="{{product.name}}">
+                </div>
+            </div>
+            <div class="col-6">
+                <div className='detail-box mb-5'>
+                    <div class="card">
+                        <div>
+                            <h1 className='mb-3'>{{product.name.title()}}</h1>
+                            <h4>${{product.price/100}}</h4> 
+                        </div>
+                        <hr>
+                        <div>
+                            <h4>Description</h4>
+                            <h6>Category: {{product.group.name.title()}}</h6>
+                            <p>{{product.description}}</p>
+
+                            <form action="{{url_for('cart.add_product')}}" method="POST">
+                                <input type="hidden" name="product_id" value="{{product.id}}">
+                                <label for="quantity" class="fw-bold">Quantity</label>
+                                <input type="number" name="quantity" id="" value="1" min ="1">
+                                <button type='submit' class="btn btn-sm btn-warning" >Add to Cart</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

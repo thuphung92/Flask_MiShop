@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Cart
+{% endblock %}
+
+{% block content %}
+    {% if session['cart'] | length <=0 %}
+        <h4 class="mt-5">There is nothing in your cart! Please <a href="{{url_for('shop.index')}}">Click here</a> to go back to the Homepage and start shopping!</h4>
+    {% else %}
+        <div class="mt-5">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+        <table class="table table-sm table-striped mt-3">
+            <thead>
+                <tr class='text-center'>
+                <th scope="col">Number</th>
+                <th scope="col">Image</th>              
+                <th scope="col">Product Name</th>
+                <th scope="col">Unit Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Subtotal</th>
+                <th scope="col">Update</th>
+                <th scope="col">Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, product in session['cart'].items() %}
+                <tr>
+                <th scope="row">{{loop.index}}</th>
+                <td><img src="{{product.img}}" style="width: 100%; height: 150px; object-fit: contain" alt="{{product.name}}"/></td>
+                <td>{{product.name.title()}}</td>
+                <td>${{product.price/100}}</td>
+
+                <form action="{{url_for('cart.update_cart', key=key)}}" method="POST">
+                    <td><input type="number" name="quantity" min="1" value="{{product.quantity}}"></td>
+
+                    {% set subtotal = product.price/100 * product.quantity|int %}
+                    <td>${{subtotal}}</td>
+
+                    <td><button type="submit" class="btn btn-sm btn-warning">Update</button></td>
+                </form>
+                <td><a class='btn btn-sm btn-danger' href="{{url_for('cart.remove_product', id=key)}}">Remove</a></td>
+                </tr>
+                {% endfor %}
+                <tr>
+                <td></td>
+                <td colspan="3"><a style="text-decoration: none" href="{{url_for('shop.index')}}">Continue Shopping</a></td>
+                <td class='fw-bolder'>Total Quan: {{total_quantity}}</td>
+                <td class='fw-bolder' colspan="3">Grand Total: ${{grand_total}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div>
+            <span style="float: right"><a class="btn btn-danger" href="{{url_for('cart.clear_cart')}}">Clear Cart</a></span>
+        </div>
+    {% endif %}
+
+{% endblock %}

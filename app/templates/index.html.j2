@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Homepage 
+{% endblock %}
+
+{% block content %}
+
+    <div class='products mt-5'>
+        <div class='container'>
+            <div class='row'>
+                {% if products_by_category %}
+
+                    {% for product in products_by_category %}
+                        <div class='col-4 mb-3'>
+                            {% include '/includes/_product.html' %}
+                        </div>
+                    {% endfor %}
+
+                {% else %}
+
+                    {% for product in products %}
+                        <div class='col-4 mb-3'>
+                            {% include '/includes/_product.html' %}
+                        </div>
+                    {% endfor %}
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
